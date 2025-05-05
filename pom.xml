@@ -64,6 +64,26 @@
 			<scope>runtime</scope>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+		<!-- Spring Security for login/auth -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+	 <!-- Webjars: SockJS and STOMP -->
+    <dependency>
+        <groupId>org.webjars</groupId>
+        <artifactId>sockjs-client</artifactId>
+        <version>1.5.1</version>
+    </dependency>
+    <dependency>
+        <groupId>org.webjars</groupId>
+        <artifactId>stomp-websocket</artifactId>
+        <version>2.3.4</version>
+    </dependency>
+
+
+
+
 <dependency>
     <groupId>org.projectlombok</groupId>
     <artifactId>lombok</artifactId>
