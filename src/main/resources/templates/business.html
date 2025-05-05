@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Бізнес</title>
+  <style>
+    /* ----- General page styles ----- */
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background-color: #fffaf5;
+    }
+
+    /* ----- Navbar styles ----- */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #fff;
+      padding: 10px 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    /* Title link inside navbar */
+    .title a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+      font-size: 20px;
+      transition: color 0.3s ease;
+    }
+
+    /* Title hover effect */
+    .title a:hover {
+      color: orange;
+    }
+
+    /* Menu links inside navbar */
+    .navbar .menu a {
+      position: relative;
+      margin-left: 20px;
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+
+    /* Underline effect for menu links */
+    .navbar .menu a::after {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 2px;
+      background-color: orange;
+      left: 50%;
+      bottom: -5px;
+      transition: all 0.3s ease;
+    }
+
+    /* Change text color and animate underline on hover */
+    .navbar .menu a:hover {
+      color: black;
+    }
+    .navbar .menu a:hover::after {
+      width: 100%;
+      left: 0;
+    }
+
+    /* ----- Page layout after navbar ----- */
+    .page-content {
+      display: flex;
+      height: calc(100vh - 60px); /* subtract navbar height */
+    }
+
+    /* Left sidebar: Business list */
+    .sidebar {
+      width: 20%;
+      background-color: #fff;
+      padding: 20px;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+      overflow-y: auto;
+    }
+
+    /* Center area: Grid of businesses */
+    .content {
+      width: auto;
+      padding: 20px;
+      overflow-y: auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    /* Right sidebar: Chat */
+    .chat {
+      width: 20%;
+      background-color: #fff;
+      padding: 20px;
+      box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Style for each business card */
+    .business-card {
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      padding: 15px;
+      text-align: center;
+    }
+    .business-card img {
+      width: 100%;
+      border-radius: 8px;
+    }
+
+    /* Chat area */
+    .chat-box {
+      flex-grow: 1;
+      overflow-y: auto;
+      background: #f9f9f9;
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    /* Chat input area */
+    .chat-input {
+      display: flex;
+    }
+    .chat-input input {
+      flex: 1;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    .chat-input button {
+      padding: 10px;
+      background-color: orange;
+      color: white;
+      border: none;
+      margin-left: 5px;
+      border-radius: 8px;
+    }
+
+    .center-area {
+      width: 60%;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .search-bar {
+      margin-bottom: 20px;
+    }
+    .search-bar input {
+      width: 97%; /* Full width of center area */
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+#comments-panel {
+  position: fixed;
+  top: 0;
+  right: -500px; /* Hidden initially */
+  width: 400px;
+  height: 100%;
+  background-color: #fff;
+  box-shadow: -2px 0 5px rgba(0,0,0,0.3);
+  transition: right 0.3s ease;
+  padding: 20px;
+  z-index: 1000;
+}
+
+#comments-panel.open {
+  right: 0;
+}
+
+#comments-panel h3 {
+  margin-top: 0;
+}
+
+  </style>
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="title">
+      <a href="/">Почаївська громада</a>
+    </div>
+    <div class="menu">
+      <a href="#">Послуги</a>
+      <a href="#">Бізнес</a>
+      <a href="#">Товари</a>
+      <a href="#">Акції</a>
+      <a href="#">Повідомлення</a>
+   
+    </div>
+  </div>
+
+  <!-- Page main content -->
+  <div class="page-content">
+
+    <!-- Sidebar with list of businesses -->
+    <div class="sidebar">
+      <h2>Бізнеси</h2>
+      <ul>
+        <li>Кафе "Сонечко"</li>
+        <li>Перукарня "Стиль"</li>
+        <li>Будівельна компанія "МайстерБуд"</li>
+        <li>Магазин техніки "ТехноСвіт"</li>
+        <li>Автосервіс "Авто-Плюс"</li>
+      </ul>
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Center area with business cards -->
+
+    <div class="center-area">	
+
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Пошук послуг або бізнесу..." />
+      </div>
+
+      <div class="content">
+
+        <div th:each="business : ${allBusinesses}">
+            <div class="business-card" th:id="${business.id}"> 
+          <!--     <img th:src="${business.imageUrl}" alt="Business Logo"> // Dynamic image -->
+              <h3 th:text="${business.name}"> Business name</h3>
+              <p th:text="${business.description}">Business description</p>
+              <p th:text="${business.location}">Location</p>
+          <!--     <p><strong>Час роботи:</strong> <span th:text="${business.hours}"></span></p> // Dynamic hours -->
+          <!--     <p><strong>Категорії:</strong> <span th:text="${business.categories}"></span></p> // Dynamic categories -->
+              <p><strong>Телефон:</strong> <span th:text="${business.phone}"></span></p> 
+          <!--     <p><strong>Рейтинг:</strong> <span th:text="${business.rating}"></span></p> // Dynamic rating -->
+              <button class="start-chat" th:attr="data-business=${business.name}">Почати чат</button>
+              <div class="feedback-buttons">
+                <button class="like-button" th:attr="data-business=${business.name}">👍 Like</button>
+                <button class="dislike-button" th:attr="data-business=${business.name}">👎 Dislike</button>
+              </div>
+            </div>
+          </div>
+
+
+        <!-- Add more business cards here if you want -->
+
+      </div>
+    </div>	
+
+
+    <!-- Right chat section -->
+    <div class="chat">
+      <h2>Чат з бізнесом</h2>
+      <div class="chat-box">
+        <p>👋 Вітаємо! Як можемо допомогти?</p>
+      </div>
+      <div class="chat-input">
+        <input type="text" placeholder="Ваше повідомлення...">
+        <button>Відправити</button>
+      </div>
+    </div>
+
+  </div>
+  
+  
+  <script type="text/javascript">
+    
+// Create the comment panel element
+const commentsPanel = document.createElement('div');
+commentsPanel.id = 'comments-panel';
+commentsPanel.innerHTML = `
+  <h3>Додати коментар</h3>
+  <textarea placeholder="Ваш коментар..." style="width: 100%; height: 150px;"></textarea><br><br>
+  <button onclick="submitComment()">Надіслати</button>
+  <button onclick="closeComments()">Закрити</button>
+`;
+document.body.appendChild(commentsPanel);
+
+// Open panel when clicking comment button
+document.querySelectorAll('.comment-button').forEach(button => {
+  button.addEventListener('click', () => {
+    document.getElementById('comments-panel').classList.add('open');
+  });
+});
+
+// Close panel
+function closeComments() {
+  document.getElementById('comments-panel').classList.remove('open');
+}
+
+// Dummy submit function
+function submitComment() {
+  alert('Коментар надіслано!');
+  closeComments();
+}
+</script>
+
+
+
+
+
+
+
+<script src="/js/startChat.js"></script>
+
+
+
+
+</body>
+</html>
+

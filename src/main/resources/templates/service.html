@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Послуги</title>
+    <style>
+
+
+        body {
+            margin: 0;
+            font-family: sans-serif;
+            background-color: #fffaf5;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            padding: 10px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: background-color 0.5s ease;
+        }
+
+
+
+/* Navbar links */
+.navbar .menu a {
+    position: relative;
+    margin-left: 20px;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+
+.navbar .menu a::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 2px;
+    background-color: orange;
+    left: 50%;
+    bottom: -5px;
+    transition: all 0.3s ease;
+}
+
+.navbar .menu a:hover::after {
+    width: 100%;
+    left: 0;
+}
+
+.navbar .title {
+    font-weight: bold;
+    font-size: 20px;
+}
+.navbar .menu a {
+    margin-left: 20px;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+.page-content {
+    display: flex;
+    height: calc(100vh - 60px); /* Subtract navbar height */
+}
+.sidebar, .chat {
+    width: 20%;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    overflow-y: auto;
+}
+.content {
+    width: 60%;
+    padding: 20px;
+    overflow-y: auto;
+}
+.service-card {
+    background-color: #fff;
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.service-card img {
+    max-width: 100%;
+    border-radius: 8px;
+}
+.chat-box {
+    height: 85%;
+    overflow-y: auto;
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+.chat-input {
+    display: flex;
+}
+.chat-input input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+.chat-input button {
+    padding: 10px;
+    background-color: orange;
+    color: white;
+    border: none;
+    margin-left: 5px;
+    border-radius: 8px;
+}
+.title a {
+    text-decoration: none;   /* No underline */
+    color: #333;              /* Same as normal text color */
+    font-weight: bold;
+    font-size: 20px;
+    transition: color 0.3s ease;
+}
+
+
+
+
+/* Modal background */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed;
+  z-index: 2000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.5); /* semi-transparent background */
+}
+
+/* Modal content box */
+.modal-content {
+  background-color: #fff;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 8px;
+  width: 80%;
+  max-width: 500px;
+  position: relative;
+}
+
+/* Close button */
+.close-button {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close-button:hover {
+  color: black;
+}
+
+.card-buttons {
+  margin-top: 10px;
+  display: flex;
+  gap: 8px;
+}
+
+.card-buttons button {
+  padding: 5px 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.card-rating {
+  margin-top: 10px;
+  font-size: 18px;
+  color: #f5b50a; /* golden color for stars */
+}
+
+
+
+}
+
+
+
+</style>
+</head>
+<body>
+
+    <div class="navbar">
+        <div class="title">
+            <a href="/">Почаївська громада</a>
+        </div>
+        <div class="menu">
+            <a href="#">Послуги</a>
+            <a href="#">Бізнес</a>
+            <a href="#">Товари</a>
+            <a href="#">Акції</a>
+        </div>
+    </div>
+
+    <div class="page-content">
+        <div class="sidebar">
+            <h2>Категорії</h2>
+            <ul>
+                <li>Будівництво</li>
+                <li>Електрика</li>
+                <li>Водопостачання</li>
+                <li>IT-послуги</li>
+                <li>Освіта</li>
+                <li>Інше</li>
+            </ul>
+        </div>
+
+        <div class="content">
+            <h2>Доступні послуги</h2>
+
+            <div class="service-card">
+  <img src="https://via.placeholder.com/300x150" alt="Service Image">
+  <h3>Ремонт будинків</h3>
+  <p>Повний спектр ремонтних робіт...</p>
+
+  <!-- Buttons Section -->
+  <div class="card-buttons">
+    <button class="details-button" data-service="Ремонт будинків">Детальніше</button>
+    <button class="chat-button" data-service="Ремонт будинків">💬 Чат</button>
+    <button class="like-button" data-service="Ремонт будинків">👍</button>
+    <button class="dislike-button" data-service="Ремонт будинків">👎</button>
+  </div>
+
+  <!-- Rating Stars Section -->
+  <div class="card-rating">
+    ⭐⭐⭐⭐☆ (4.0/5)
+  </div>
+</div>
+
+
+          <div class="service-card">
+            <img src="https://via.placeholder.com/300x150" alt="Service Image">
+            <h3>Установка сантехніки</h3>
+            <p>Професійна установка ванн, умивальників, душових кабін.</p>
+            <button>Детальніше</button>
+        </div>
+
+
+        <div class="service-card">
+            <img src="https://via.placeholder.com/300x150" alt="Service Image">
+            <h3>Ремонт будинків</h3>
+            <p>Якісний ремонт приватних будинків та квартир.</p>
+            <button>Детальніше</button>
+        </div>
+
+        <div class="service-card">
+            <img src="https://via.placeholder.com/300x150" alt="Service Image">
+            <h3>Установка сантехніки</h3>
+            <p>Професійна установка ванн, умивальників, душових кабін.</p>
+            <button>Детальніше</button>
+        </div>
+
+
+
+
+        <div class="service-card">
+            <img src="https://via.placeholder.com/300x150" alt="Service Image">
+            <h3>Електромонтажні роботи</h3>
+            <p>Монтаж проводки, розеток, світильників у квартирах та будинках.</p>
+            <button>Детальніше</button>
+        </div>
+
+        <div class="service-card">
+            <img src="https://via.placeholder.com/300x150" alt="Service Image">
+            <h3>Створення вебсайтів</h3>
+            <p>Розробка сучасних сайтів для бізнесу та особистих потреб.</p>
+            <button>Детальніше</button>
+        </div>
+
+        <div class="service-card">
+            <img src="https://via.placeholder.com/300x150" alt="Service Image">
+            <h3>Ремонт техніки</h3>
+            <p>Ремонт телефонів, ноутбуків, побутової техніки.</p>
+            <button>Детальніше</button>
+        </div>
+
+        <div class="service-card">
+            <img src="https://via.placeholder.com/300x150" alt="Service Image">
+            <h3>Перекладацькі послуги</h3>
+            <p>Письмові та усні переклади з англійської, німецької, польської мов.</p>
+            <button>Детальніше</button>
+        </div>
+
+        <div class="service-card">
+            <img src="https://via.placeholder.com/300x150" alt="Service Image">
+            <h3>Курси англійської мови</h3>
+            <p>Індивідуальні та групові заняття для дорослих та дітей.</p>
+            <button>Детальніше</button>
+        </div>
+
+        <div class="service-card">
+            <img src="https://via.placeholder.com/300x150" alt="Service Image">
+            <h3>Малярні роботи</h3>
+            <p>Фарбування стін, стель та фасадів швидко та якісно.</p>
+            <button>Детальніше</button>
+        </div>
+
+        <div class="service-card">
+            <img src="https://via.placeholder.com/300x150" alt="Service Image">
+            <h3>Встановлення кондиціонерів</h3>
+            <p>Продаж, монтаж та обслуговування кліматичної техніки.</p>
+            <button>Детальніше</button>
+        </div>
+
+        <div class="service-card">
+            <img src="https://via.placeholder.com/300x150" alt="Service Image">
+            <h3>Оренда автомобілів</h3>
+            <p>Оренда легкових автомобілів для особистих та бізнес потреб.</p>
+            <button>Детальніше</button>
+        </div>
+
+
+
+
+
+
+        <!-- Add more cards dynamically here -->
+
+    </div>
+
+    <div class="chat">
+        <h2>Ваш чат</h2>
+        <div class="chat-box">
+            <p>Розпочати розмову</p>
+        </div>
+        <div class="chat-input">
+            <input type="text" placeholder="Ваше повідомлення...">
+            <button>Відправити</button>
+        </div>
+    </div>
+
+
+
+    <div id="service-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <h2 id="modal-title">Назва послуги</h2>
+        <p id="modal-description">Тут буде більше інформації про послугу...</p>
+
+        <h3>Додати коментар</h3>
+        <textarea id="comment-input" placeholder="Ваш коментар..." style="width: 100%; height: 100px;"></textarea><br><br>
+        <button onclick="submitModalComment()">Надіслати коментар</button>
+
+        <hr style="margin: 20px 0;">
+
+        <h3>Коментарі</h3>
+        <ul id="comment-list" style="list-style-type: disc; padding-left: 20px;">
+          <!-- Comments will appear here -->
+      </ul>
+  </div>
+</div>
+</div>
+
+
+
+
+
+</div>
+
+
+
+
+<script>
+    // Find the navbar
+    const navbar = document.querySelector('.navbar');
+    // Find all links inside the menu
+    const links = document.querySelectorAll('.menu a');
+
+    links.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault(); // Optional: prevent actual navigation for now
+            navbar.classList.add('animate');
+
+            // Remove the animation class after it finishes
+            setTimeout(() => {
+                navbar.classList.remove('animate');
+            }, 600); // Match animation time
+        });
+    });
+</script>
+
+
+<script type="text/javascript">
+    
+
+
+
+    const modal = document.getElementById('service-modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalDescription = document.getElementById('modal-description');
+    const closeButton = document.querySelector('.close-button');
+    const commentInput = document.getElementById('comment-input');
+    const commentList = document.getElementById('comment-list');
+
+// Store comments in memory temporarily
+    let comments = [];
+
+// Open modal when clicking "Детальніше"
+    document.querySelectorAll('.details-button').forEach(button => {
+      button.addEventListener('click', () => {
+        const serviceName = button.getAttribute('data-service');
+        modalTitle.textContent = serviceName;
+        modalDescription.textContent = `Детальніша інформація про послугу: ${serviceName}. Тут можна описати переваги, процес, етапи виконання тощо.`;
+        modal.style.display = 'block';
+        loadComments();
+    });
+  });
+
+// Close modal
+    closeButton.addEventListener('click', () => {
+      modal.style.display = 'none';
+  });
+
+// Close modal when clicking outside
+    window.addEventListener('click', (event) => {
+      if (event.target === modal) {
+        modal.style.display = 'none';
+    }
+});
+
+// Submit comment
+    function submitModalComment() {
+      const text = commentInput.value.trim();
+      if (text !== '') {
+        comments.push(text);
+        commentInput.value = '';
+        loadComments();
+    } else {
+        alert('Будь ласка, введіть текст коментаря.');
+    }
+}
+
+// Load comments
+function loadComments() {
+  commentList.innerHTML = ''; // Clear the list
+  comments.forEach(comment => {
+    const li = document.createElement('li');
+    li.textContent = comment;
+    commentList.appendChild(li);
+});
+}
+
+
+
+
+
+
+</script>
+
+
+</body>
+</html>
+
