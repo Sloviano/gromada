@@ -2,9 +2,9 @@
 <html lang="uk" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
+
   <title>Бізнес</title>
-  <script src="/webjars/sockjs-client/sockjs.min.js"></script>
-  <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+  
   <style>
     /* ----- General page styles ----- */
     body {
@@ -278,56 +278,22 @@
         <p>👋 Вітаємо! Як можемо допомогти?</p>
       </div>
       <div class="chat-input">
-        <input type="text" placeholder="Ваше повідомлення...">
-        <button>Відправити</button>
+        <input id="messageInput"  type="text" placeholder="Ваше повідомлення...">
+        <button id="sendButton">Відправити</button>
       </div>
     </div>
 
   </div>
   
   
-  <script type="text/javascript">
-    
-// Create the comment panel element
-const commentsPanel = document.createElement('div');
-commentsPanel.id = 'comments-panel';
-commentsPanel.innerHTML = `
-  <h3>Додати коментар</h3>
-  <textarea placeholder="Ваш коментар..." style="width: 100%; height: 150px;"></textarea><br><br>
-  <button onclick="submitComment()">Надіслати</button>
-  <button onclick="closeComments()">Закрити</button>
-`;
-document.body.appendChild(commentsPanel);
-
-// Open panel when clicking comment button
-document.querySelectorAll('.comment-button').forEach(button => {
-  button.addEventListener('click', () => {
-    document.getElementById('comments-panel').classList.add('open');
-  });
-});
-
-// Close panel
-function closeComments() {
-  document.getElementById('comments-panel').classList.remove('open');
-}
-
-// Dummy submit function
-function submitComment() {
-  alert('Коментар надіслано!');
-  closeComments();
-}
-</script>
+  
 
 
 
-
-
-
-
-<script src="/js/startChat.js"></script>
-
-
-
+<script type="text/javascript"src="/webjars/sockjs-client/sockjs.min.js"></script>
+<script type="text/javascript"src="/webjars/stomp-websocket/stomp.min.js"></script>
+<script type="text/javascript" src="/js/startChat.js"></script>
+<script type="text/javascript" src="/js/openCommentPanel.js"></script>
 
 </body>
 </html>

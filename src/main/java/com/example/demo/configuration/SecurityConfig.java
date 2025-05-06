@@ -21,7 +21,9 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     
     http
     .authorizeHttpRequests(auth -> auth
-        .requestMatchers("/businesses/**").authenticated())
+        .requestMatchers("/fsvicon.ico","/webjars/**","/js/**","/css/**","/images/**","/ws/**").permitAll()
+        .requestMatchers("/businesses/**").authenticated()
+        .anyRequest().permitAll())
         .formLogin(formLogin -> formLogin.defaultSuccessUrl("/businesses/list",true)
         .permitAll())
         .csrf(csrf -> csrf.disable()); 
@@ -38,7 +40,7 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
             .build();
 
         UserDetails user2 = User.withDefaultPasswordEncoder()
-            .username("bob")
+            .username("Кафе Червона коза")
             .password("1234")
             .roles("USER")
             .build();
