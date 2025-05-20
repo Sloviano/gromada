@@ -19,6 +19,7 @@ document.querySelectorAll('.comment-button').forEach(button => {
     });
   });
   
+  
   // Close panel
   function closeComments() {
     document.getElementById('comments-panel').classList.remove('open');

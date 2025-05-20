@@ -22,7 +22,7 @@ public class BusinessPageController {
         @GetMapping("/businesses/{id}")
         public String getBusiness(@PathVariable long id, Model model){
 
-                model.addAttribute("businesses", businessService.getById(id));
+            model.addAttribute("businesses", businessService.getById(id));
 
             return "business";
 

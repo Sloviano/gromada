@@ -32,6 +32,10 @@ public class Business {
     private String location;
 
     private double rating;
+     
+    private short likes;
+
+    private short dislikes;
 
 
 

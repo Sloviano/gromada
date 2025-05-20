@@ -6,5 +6,7 @@ CREATE TABLE business (
     category VARCHAR(100),
     phone VARCHAR(20),
     location VARCHAR(255),
-    rating DOUBLE
+    rating DOUBLE,
+    like_count INT DEFAULT 0,
+    dislike_count INT DEFAULT 0
 );

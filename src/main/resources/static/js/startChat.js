@@ -63,31 +63,23 @@
 
         if (body === null){
           payload = {
-            recipient: businessName,        // assume you set `username` earlier
+            recipient: businessName,      
             content:  text,
             // for private messaging you might also include `recipient`
           };
 
         }else{
           payload = {
-            recipient: body.sender,        // assume you set `username` earlier
+            recipient: body.sender,       
             content:  text,
-            // for private messaging you might also include `recipient`
+            
           };
         }
-
-
-      
-    
+        
         // 5. Send via STOMP to the server endpoint
         stompClient.send("/app/chat.private", {}, JSON.stringify(payload));
     
         // 6. Clear the input for the next message
         chatInput.value = '';
       });
-
-
-
-
-
     });
