@@ -1,6 +1,6 @@
 package com.example.demo.entities;
 
-import java.time.LocalDateTime;
+import java.math.BigDecimal;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,37 +16,32 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "chat_message")
+@Table(name = "order_item")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChatMessage {
+public class OrderItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 5000)
-    private String content;
-
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime sentAt;
-
     @Column(nullable = false)
-    private boolean read = false;
+    private int quantity;
 
-    // The sender of this message
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sender_id", nullable = false)
-    private User sender;
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal unitPrice;
 
-    // The recipient of this message
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "recipient_id", nullable = false)
-    private User recipient;
+    @Column(nullable = false, precision = 12, scale = 2)
+    private BigDecimal subtotal;
 
-    // The conversation this message belongs to
+    // The order this item belongs to
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "conversation_id", nullable = false)
-    private ChatConversation conversation;
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
+
+    // The product being ordered
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
 }

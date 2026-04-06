@@ -16,37 +16,32 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "chat_message")
+@Table(name = "review")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChatMessage {
+public class Review {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 5000)
-    private String content;
+    @Column(nullable = false)
+    private int rating; // 1-5
+
+    @Column(length = 2000)
+    private String comment;
 
     @Column(nullable = false, updatable = false)
-    private LocalDateTime sentAt;
+    private LocalDateTime createdAt;
 
-    @Column(nullable = false)
-    private boolean read = false;
-
-    // The sender of this message
+    // The user who wrote this review
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sender_id", nullable = false)
-    private User sender;
+    @JoinColumn(name = "author_id", nullable = false)
+    private User author;
 
-    // The recipient of this message
+    // The business being reviewed
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "recipient_id", nullable = false)
-    private User recipient;
-
-    // The conversation this message belongs to
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "conversation_id", nullable = false)
-    private ChatConversation conversation;
+    @JoinColumn(name = "business_id", nullable = false)
+    private Business business;
 }
