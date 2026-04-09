@@ -1,17 +1,17 @@
 -- Seed admin user (password: admin123, BCrypt encoded)
 INSERT INTO app_user (id, username, password, email, full_name, phone, role, created_at, active)
 VALUES
-(1, 'admin', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'admin@gromada.ua', 'System Admin', '+380670000000', 'ADMIN', CURRENT_TIMESTAMP, true);
+(1, 'admin', '$2b$10$XNBY.kmwAFeeEEWGbCTBkeG8w1egvoldZ2E.oGwPWElh4OSpgjfsi', 'admin@gromada.ua', 'System Admin', '+380670000000', 'ADMIN', CURRENT_TIMESTAMP, true);
 
 -- Seed demo citizen
 INSERT INTO app_user (id, username, password, email, full_name, phone, role, created_at, active)
 VALUES
-(2, 'alice', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'alice@gromada.ua', 'Alice Koval', '+380671111111', 'CITIZEN', CURRENT_TIMESTAMP, true);
+(2, 'alice', '$2b$10$XNBY.kmwAFeeEEWGbCTBkeG8w1egvoldZ2E.oGwPWElh4OSpgjfsi', 'alice@gromada.ua', 'Alice Koval', '+380671111111', 'CITIZEN', CURRENT_TIMESTAMP, true);
 
 -- Seed demo business owner
 INSERT INTO app_user (id, username, password, email, full_name, phone, role, created_at, active)
 VALUES
-(3, 'cafe_owner', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'cafe@gromada.ua', 'Oleg Bondar', '+380672222222', 'BUSINESS_OWNER', CURRENT_TIMESTAMP, true);
+(3, 'cafe_owner', '$2b$10$XNBY.kmwAFeeEEWGbCTBkeG8w1egvoldZ2E.oGwPWElh4OSpgjfsi', 'cafe@gromada.ua', 'Oleg Bondar', '+380672222222', 'BUSINESS_OWNER', CURRENT_TIMESTAMP, true);
 
 -- Seed businesses
 INSERT INTO business (id, name, description, category, phone, location, rating, likes, dislikes, verified, created_at, owner_id)

@@ -72,6 +72,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/**").authenticated()
                 // Thymeleaf pages
                 .requestMatchers("/businesses/**").authenticated()
+                .requestMatchers("/chat").authenticated()
                 .anyRequest().permitAll()
             )
             .formLogin(formLogin -> formLogin

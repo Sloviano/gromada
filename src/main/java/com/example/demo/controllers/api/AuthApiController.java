@@ -1,6 +1,9 @@
 package com.example.demo.controllers.api;
 
+import java.security.Principal;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,5 +25,10 @@ public class AuthApiController {
     @PostMapping("/register")
     public ResponseEntity<UserResponse> register(@RequestBody UserRegistrationRequest request) {
         return ResponseEntity.ok(userService.register(request));
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserResponse> me(Principal principal) {
+        return ResponseEntity.ok(userService.getByUsername(principal.getName()));
     }
 }
