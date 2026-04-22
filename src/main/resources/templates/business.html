@@ -168,6 +168,22 @@
       border: 1px solid #ccc;
     }
 
+/* ----- Full chat styles ----- */
+.ws-status { font-size: 0.7rem; padding: 2px 6px; border-radius: 10px; }
+.ws-connected { background: #d4edda; color: #155724; }
+.ws-disconnected { background: #f8d7da; color: #721c24; }
+.conv-item { padding: 8px 10px; cursor: pointer; border-bottom: 1px solid #f0f0f0; transition: background 0.15s; }
+.conv-item:hover, .conv-item.active { background: #fff3e8; }
+.conv-name { font-weight: 600; font-size: 0.82rem; }
+.conv-last { color: #888; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 0.74rem; }
+.badge-unread { background: #f4731c; color: #fff; border-radius: 999px; padding: 1px 5px; font-size: 0.68rem; }
+.msg-area { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; padding: 8px; }
+.bubble { max-width: 85%; padding: 6px 10px; border-radius: 14px; font-size: 0.8rem; word-break: break-word; }
+.bubble-sent { background: #f4731c; color: #fff; align-self: flex-end; border-bottom-right-radius: 3px; }
+.bubble-recv { background: #e9ecef; color: #212529; align-self: flex-start; border-bottom-left-radius: 3px; }
+.bubble-meta { font-size: 0.65rem; opacity: 0.6; margin-top: 2px; }
+.chat-back-btn { background: none; border: none; color: #f4731c; cursor: pointer; font-size: 0.82rem; padding: 2px 0; text-decoration: underline; }
+
 #comments-panel {
   position: fixed;
   top: 0;
@@ -201,10 +217,9 @@
     </div>
     <div class="menu">
       <a href="#">Послуги</a>
-      <a href="#">Бізнес</a>
+      <a href="/businesses/list">Бізнес</a>
       <a href="#">Товари</a>
       <a href="#">Акції</a>
-      <a href="#">Повідомлення</a>
    
     </div>
   </div>
@@ -263,14 +278,28 @@
 
 
     <!-- Right chat section -->
-    <div class="chat">
-      <h2>Чат з бізнесом</h2>
-      <div class="chat-box">
-        <p>👋 Вітаємо! Як можемо допомогти?</p>
+    <div class="chat" style="display:flex;flex-direction:column;padding:12px;overflow:hidden;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <h2 style="font-size:1rem;margin:0;">Чат</h2>
+        <span id="wsStatus" class="ws-status ws-disconnected">● офлайн</span>
       </div>
-      <div class="chat-input">
-        <input id="messageInput"  type="text" placeholder="Ваше повідомлення...">
-        <button id="sendButton">Відправити</button>
+
+      <!-- Conversations list -->
+      <div id="convListPanel" style="flex:1;overflow-y:auto;">
+        <div id="convList"><div style="color:#aaa;font-size:0.82rem;padding:4px;">Завантаження...</div></div>
+      </div>
+
+      <!-- Messages panel (hidden initially) -->
+      <div id="chatPanel" style="display:none;flex:1;flex-direction:column;overflow:hidden;">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">
+          <button class="chat-back-btn" onclick="showConversations()">← Назад</button>
+          <span id="chatWith" style="font-weight:600;font-size:0.85rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
+        </div>
+        <div id="messagesArea" class="msg-area"></div>
+        <div class="chat-input" style="margin-top:6px;">
+          <input id="messageInput" type="text" placeholder="Повідомлення..." style="flex:1;padding:6px;border-radius:6px;border:1px solid #ccc;font-size:0.82rem;">
+          <button id="sendButton" style="padding:6px 10px;background:orange;color:#fff;border:none;margin-left:4px;border-radius:6px;font-size:0.82rem;">→</button>
+        </div>
       </div>
     </div>
 
@@ -281,10 +310,158 @@
 
 
 
-<script type="text/javascript"src="/webjars/sockjs-client/sockjs.min.js"></script>
-<script type="text/javascript"src="/webjars/stomp-websocket/stomp.min.js"></script>
-<script type="text/javascript" src="/js/startChat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.6.1/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
 <script type="text/javascript" src="/js/openCommentPanel.js"></script>
+<script>
+    let currentUser = null;
+    let activeConversation = null;
+    let stompClient = null;
+    let conversations = [];
+
+    async function initChat() {
+        try {
+            const res = await fetch('/api/auth/me');
+            if (!res.ok) return;
+            currentUser = await res.json();
+        } catch (e) { return; }
+        await loadConversations();
+        connectWS();
+    }
+
+    async function loadConversations() {
+        const res = await fetch('/api/chat/conversations?userId=' + currentUser.id);
+        if (!res.ok) return;
+        conversations = await res.json();
+        renderConversations();
+    }
+
+    function renderConversations() {
+        const list = document.getElementById('convList');
+        if (conversations.length === 0) {
+            list.innerHTML = '<div style="color:#aaa;font-size:0.82rem;padding:4px;">Немає розмов</div>';
+            return;
+        }
+        list.innerHTML = conversations.map(c => {
+            const otherName = c.participantOneId === currentUser.id ? c.participantTwoName : c.participantOneName;
+            const unread = c.unreadCount > 0 ? `<span class="badge-unread">${c.unreadCount}</span>` : '';
+            const last = c.lastMessage ? escHtml(c.lastMessage) : '<em>Немає повідомлень</em>';
+            const active = activeConversation && activeConversation.id === c.id ? ' active' : '';
+            return `<div class="conv-item${active}" onclick="openConversation(${c.id})">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <span class="conv-name">${escHtml(otherName)}</span>${unread}
+                </div>
+                <div class="conv-last">${last}</div>
+            </div>`;
+        }).join('');
+    }
+
+    async function openConversation(convId) {
+        activeConversation = conversations.find(c => c.id === convId);
+        renderConversations();
+        const otherName = activeConversation.participantOneId === currentUser.id
+            ? activeConversation.participantTwoName : activeConversation.participantOneName;
+        document.getElementById('chatWith').textContent = otherName;
+        document.getElementById('convListPanel').style.display = 'none';
+        const chatPanel = document.getElementById('chatPanel');
+        chatPanel.style.display = 'flex';
+        chatPanel.style.flexDirection = 'column';
+
+        const res = await fetch('/api/chat/conversations/' + convId + '/messages');
+        if (!res.ok) return;
+        const messages = await res.json();
+        renderMessages(messages);
+        fetch('/api/chat/conversations/' + convId + '/read?userId=' + currentUser.id, { method: 'POST' });
+        const conv = conversations.find(c => c.id === convId);
+        if (conv) conv.unreadCount = 0;
+        renderConversations();
+        document.getElementById('messageInput').focus();
+    }
+
+    function showConversations() {
+        activeConversation = null;
+        document.getElementById('convListPanel').style.display = '';
+        document.getElementById('chatPanel').style.display = 'none';
+        renderConversations();
+    }
+
+    function renderMessages(messages) {
+        const area = document.getElementById('messagesArea');
+        area.innerHTML = messages.map(m => buildBubble(m)).join('');
+        area.scrollTop = area.scrollHeight;
+    }
+
+    function buildBubble(m) {
+        const sent = m.senderId === currentUser.id;
+        const cls = sent ? 'bubble-sent' : 'bubble-recv';
+        const time = m.sentAt ? new Date(m.sentAt).toLocaleTimeString('uk-UA', { hour: '2-digit', minute: '2-digit' }) : '';
+        return `<div class="bubble ${cls}">${escHtml(m.content)}<div class="bubble-meta">${time}</div></div>`;
+    }
+
+    function sendMessage() {
+        const input = document.getElementById('messageInput');
+        const content = input.value.trim();
+        if (!content || !activeConversation || !stompClient) return;
+        const recipientId = activeConversation.participantOneId === currentUser.id
+            ? activeConversation.participantTwoId : activeConversation.participantOneId;
+        stompClient.publish({
+            destination: '/app/chat.private',
+            body: JSON.stringify({ conversationId: activeConversation.id, recipientId, content })
+        });
+        input.value = '';
+    }
+
+    document.getElementById('sendButton').addEventListener('click', sendMessage);
+    document.getElementById('messageInput').addEventListener('keydown', e => {
+        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+    });
+
+    function connectWS() {
+        stompClient = new StompJs.Client({
+            webSocketFactory: () => new SockJS('/ws'),
+            reconnectDelay: 5000,
+            onConnect: () => {
+                setWsStatus(true);
+                stompClient.subscribe('/user/' + currentUser.id + '/queue/messages', onMessage);
+            },
+            onDisconnect: () => setWsStatus(false),
+            onStompError: () => setWsStatus(false)
+        });
+        stompClient.activate();
+    }
+
+    function onMessage(frame) {
+        const msg = JSON.parse(frame.body);
+        const conv = conversations.find(c => c.id === msg.conversationId);
+        if (conv) {
+            conv.lastMessage = msg.content;
+            conv.lastMessageAt = msg.sentAt;
+            if (!activeConversation || activeConversation.id !== conv.id) {
+                conv.unreadCount = (conv.unreadCount || 0) + 1;
+            }
+        }
+        renderConversations();
+        if (activeConversation && activeConversation.id === msg.conversationId) {
+            const area = document.getElementById('messagesArea');
+            area.insertAdjacentHTML('beforeend', buildBubble(msg));
+            area.scrollTop = area.scrollHeight;
+            fetch('/api/chat/conversations/' + msg.conversationId + '/read?userId=' + currentUser.id, { method: 'POST' });
+        }
+    }
+
+    function setWsStatus(connected) {
+        const el = document.getElementById('wsStatus');
+        if (connected) { el.textContent = '● онлайн'; el.className = 'ws-status ws-connected'; }
+        else { el.textContent = '● офлайн'; el.className = 'ws-status ws-disconnected'; }
+    }
+
+    function escHtml(str) {
+        if (!str) return '';
+        return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    initChat();
+</script>
 
 </body>
 </html>

@@ -10,8 +10,10 @@ public class ChatMessageResponse {
     private Long conversationId;
     private Long senderId;
     private String senderName;
+    private String senderUsername;
     private Long recipientId;
     private String recipientName;
+    private String recipientUsername;
     private String content;
     private LocalDateTime sentAt;
     private boolean read;

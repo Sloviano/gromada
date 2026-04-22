@@ -145,8 +145,10 @@ public class ChatServiceImpl implements ChatService {
         response.setConversationId(message.getConversation().getId());
         response.setSenderId(message.getSender().getId());
         response.setSenderName(message.getSender().getFullName());
+        response.setSenderUsername(message.getSender().getUsername());
         response.setRecipientId(message.getRecipient().getId());
         response.setRecipientName(message.getRecipient().getFullName());
+        response.setRecipientUsername(message.getRecipient().getUsername());
         response.setContent(message.getContent());
         response.setSentAt(message.getSentAt());
         response.setRead(message.isRead());
