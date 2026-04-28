@@ -1,2 +1,0 @@
--- Schema is managed by Hibernate ddl-auto=update.
--- This file is kept for reference only; Hibernate generates all tables from @Entity classes.
